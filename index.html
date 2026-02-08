@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Cheat Sheet PHPDoc – Tags</title>
+        <style>
+            :root {
+                --bg: #0b0f19;
+                --card: rgba(255, 255, 255, .06);
+                --card2: rgba(255, 255, 255, .09);
+                --border: rgba(255, 255, 255, .12);
+                --text: #e9eefc;
+                --muted: rgba(233, 238, 252, .72);
+                --accent: #7aa2ff;
+                --code: rgba(0, 0, 0, .35);
+                --danger: rgba(255, 122, 122, .9);
+            }
+
+            * {
+                box-sizing: border-box
+            }
+
+            body {
+                margin: 0;
+                font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+                color: var(--text);
+                min-height: 100vh;
+                padding: 24px;
+                background:
+                    radial-gradient(1200px 700px at 10% 10%, rgba(122, 162, 255, .18), transparent 60%),
+                    radial-gradient(900px 600px at 90% 10%, rgba(255, 122, 168, .12), transparent 60%),
+                    var(--bg);
+            }
+
+            header {
+                max-width: 980px;
+                margin: 0 auto 12px auto;
+                padding: 18px;
+                border-radius: 14px;
+                background: var(--card);
+                border: 1px solid var(--border);
+                backdrop-filter: blur(8px);
+            }
+
+            h1 {
+                margin: 0 0 6px 0;
+                font-size: 20px
+            }
+
+            p {
+                margin: 0;
+                color: var(--muted);
+                line-height: 1.4
+            }
+
+            .toolbar {
+                max-width: 980px;
+                margin: 10px auto 0 auto;
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+
+            .tool {
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: 999px;
+                padding: 10px 12px;
+                color: var(--muted);
+                font-size: 13px;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .tool:hover {
+                background: var(--card2);
+                color: var(--text)
+            }
+
+            .hint {
+                max-width: 980px;
+                margin: 10px auto 0 auto;
+                color: rgba(233, 238, 252, .55);
+                font-size: 12px;
+            }
+
+            .searchWrap {
+                max-width: 980px;
+                margin: 12px auto 0 auto;
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                align-items: center;
+                padding: 14px;
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                backdrop-filter: blur(8px);
+            }
+
+            .searchWrap label {
+                font-size: 13px;
+                color: var(--muted);
+                white-space: nowrap
+            }
+
+            .searchInput {
+                flex: 1;
+                min-width: 240px;
+                border: 1px solid var(--border);
+                background: rgba(0, 0, 0, .18);
+                color: var(--text);
+                padding: 10px 12px;
+                border-radius: 12px;
+                outline: none;
+                font-size: 14px;
+            }
+
+            .searchInput:focus {
+                border-color: rgba(122, 162, 255, .55);
+                box-shadow: 0 0 0 3px rgba(122, 162, 255, .12)
+            }
+
+            .pill {
+                border: 1px solid var(--border);
+                background: rgba(0, 0, 0, .14);
+                color: var(--muted);
+                border-radius: 999px;
+                padding: 8px 10px;
+                font-size: 12px;
+                display: inline-flex;
+                gap: 8px;
+                align-items: center;
+                cursor: pointer;
+                user-select: none;
+            }
+
+            .pill:hover {
+                background: rgba(255, 255, 255, .07);
+                color: var(--text)
+            }
+
+            .pill kbd {
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+                font-size: 11px;
+                opacity: .85;
+            }
+
+            .meta {
+                margin-left: auto;
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                align-items: center
+            }
+
+            .noResults {
+                max-width: 980px;
+                margin: 12px auto 0 auto;
+                padding: 12px 14px;
+                border-radius: 14px;
+                border: 1px solid rgba(255, 255, 255, .10);
+                background: rgba(255, 122, 122, .08);
+                color: rgba(255, 255, 255, .92);
+                display: none;
+            }
+
+            .noResults strong {
+                color: var(--danger)
+            }
+
+            .wrap {
+                max-width: 980px;
+                margin: 14px auto 0 auto;
+                display: grid;
+                gap: 10px
+            }
+
+            .row {
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                overflow: hidden;
+                background: var(--card);
+                backdrop-filter: blur(8px);
+            }
+
+            .btn {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                padding: 14px 16px;
+                cursor: pointer;
+                border: 0;
+                background: transparent;
+                color: var(--text);
+                text-align: left;
+                font-size: 14px;
+            }
+
+            .btn:hover {
+                background: var(--card2)
+            }
+
+            .left {
+                display: flex;
+                align-items: baseline;
+                gap: 14px;
+                flex-wrap: wrap
+            }
+
+            .tag {
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+                color: var(--accent);
+                font-weight: 700;
+                letter-spacing: .2px;
+            }
+
+            .where {
+                color: var(--muted);
+                font-size: 13px
+            }
+
+            .chev {
+                opacity: .8;
+                transition: transform .18s ease;
+                user-select: none
+            }
+
+            .row[data-open="true"] .chev {
+                transform: rotate(180deg)
+            }
+
+            .details {
+                display: none;
+                padding: 0 16px 16px 16px;
+                border-top: 1px solid var(--border)
+            }
+
+            .row[data-open="true"] .details {
+                display: block
+            }
+
+            .desc {
+                margin: 12px 0 10px 0;
+                color: var(--muted);
+                line-height: 1.5;
+                font-size: 13px
+            }
+
+            pre {
+                margin: 0;
+                background: var(--code);
+                border: 1px solid rgba(255, 255, 255, .12);
+                border-radius: 12px;
+                padding: 12px;
+                overflow: auto;
+            }
+
+            code {
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+                font-size: 12.5px;
+                color: #f1f5ff;
+            }
+
+            .hidden {
+                display: none !important
+            }
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <h1>PHPDoc – Tags (clique para ver descrição + exemplo)</h1>
+            <p>Você pode buscar por <strong>tag</strong> (ex.: @param), por <strong>onde usa</strong> (ex.: “classes”),
+                ou por <strong>descrição</strong> (ex.: “exceções”).</p>
+        </header>
+
+        <div class="toolbar">
+            <div class="tool" id="openAll">Abrir tudo</div>
+            <div class="tool" id="closeAll">Fechar tudo</div>
+            <div class="tool" id="toggleOne">Modo “abrir só uma”</div>
+        </div>
+        <div class="hint" id="modeHint">Modo atual: múltiplas abertas (pode abrir várias ao mesmo tempo).</div>
+
+        <section class="searchWrap" aria-label="Barra de busca">
+            <label for="q">Buscar</label>
+            <input id="q" class="searchInput" type="search"
+                placeholder="Ex.: @return, classes, exceções, link, obsoleto, genéricos..." autocomplete="off">
+            <div class="meta">
+                <div class="pill" id="clearSearch" title="Limpar busca (Esc)">
+                    Limpar <kbd>Esc</kbd>
+                </div>
+                <div class="pill" id="focusSearch" title="Focar na busca (Ctrl/⌘ + K)">
+                    Focar <kbd>Ctrl</kbd>+<kbd>K</kbd>
+                </div>
+                <div class="pill" id="countPill" title="Quantidade de resultados visíveis">
+                    0/0
+                </div>
+            </div>
+        </section>
+
+        <div class="noResults" id="noResults">
+            <strong>Nenhum resultado.</strong> Tente outra palavra (ex.: <em>classes</em>, <em>funções</em>,
+            <em>exceções</em>, <em>genérico</em>).
+        </div>
+
+        <main class="wrap" id="list"></main>
+
+        <script>
+            // Todas as tags que eu tinha colocado na tabela (básicas + avançadas)
+            const tags = [
+                // Básicas / comuns
+                {
+                    tag: "@param",
+                    where: "Funções / métodos",
+                    desc: "Define o tipo e o significado de um parâmetro. IDEs/analisadores usam para autocomplete e validações estáticas.",
+                    example:
+                        `/**
+ * @param int $id ID do usuário
+ */
+function findUser($id) {}`
+                },
+                {
+                    tag: "@return",
+                    where: "Funções / métodos",
+                    desc: "Define o tipo do valor retornado. Muito útil quando o tipo nativo não expressa detalhes (ex.: array tipado).",
+                    example:
+                        `/**
+ * @return User|null
+ */
+function findUser(int $id) {}`
+                },
+                {
+                    tag: "@var",
+                    where: "Variáveis / propriedades",
+                    desc: "Declara o tipo de uma variável/propriedade quando o PHP não consegue inferir. Ajuda IDE e analisadores.",
+                    example:
+                        `/** @var User $user */
+$user = $repo->find(1);`
+                },
+                {
+                    tag: "@throws",
+                    where: "Funções / métodos",
+                    desc: "Indica quais exceções podem ser lançadas. Ajuda a entender o contrato e como tratar erros.",
+                    example:
+                        `/**
+ * @throws RuntimeException
+ */
+function conectarBanco(): void {
+    throw new RuntimeException("Falhou");
+}`
+                },
+                {
+                    tag: "@property",
+                    where: "Classes",
+                    desc: "Declara propriedades mágicas (via __get/__set ou ORMs) para IDE/analisador entenderem.",
+                    example:
+                        `/**
+ * @property int $id
+ * @property string $name
+ */
+class User {}`
+                },
+                {
+                    tag: "@property-read",
+                    where: "Classes",
+                    desc: "Propriedade mágica somente leitura (não deve ser setada diretamente).",
+                    example:
+                        `/**
+ * @property-read int $id
+ */
+class User {}`
+                },
+                {
+                    tag: "@property-write",
+                    where: "Classes",
+                    desc: "Propriedade mágica somente escrita (casos específicos, ex.: password via setter mágico).",
+                    example:
+                        `/**
+ * @property-write string $password
+ */
+class User {}`
+                },
+                {
+                    tag: "@method",
+                    where: "Classes",
+                    desc: "Declara métodos mágicos (via __call/__callStatic) para IDE/analisador reconhecer chamadas dinâmicas.",
+                    example:
+                        `/**
+ * @method static User find(int $id)
+ */
+class User {}`
+                },
+                {
+                    tag: "@deprecated",
+                    where: "Qualquer (função/classe/método/propriedade)",
+                    desc: "Marca como obsoleto. IDEs costumam alertar para evitar uso e migrar para alternativa.",
+                    example:
+                        `/**
+ * @deprecated Use newMethod() no lugar.
+ */
+function oldMethod(): void {}`
+                },
+                {
+                    tag: "@see",
+                    where: "Qualquer",
+                    desc: "Referência relacionada (classe, método, doc). Ajuda a navegar no projeto.",
+                    example:
+                        `/**
+ * @see UserRepository::find()
+ */`
+                },
+                {
+                    tag: "@link",
+                    where: "Qualquer",
+                    desc: "Link externo relacionado (documentação, issue, especificação).",
+                    example:
+                        `/**
+ * @link https://www.php.net/manual/en/
+ */`
+                },
+                {
+                    tag: "@example",
+                    where: "Qualquer",
+                    desc: "Aponta um exemplo de uso (arquivo/snippet/caminho). Útil em libs e APIs internas.",
+                    example:
+                        `/**
+ * @example examples/usage.php
+ */`
+                },
+                {
+                    tag: "@author",
+                    where: "Arquivo / classe",
+                    desc: "Declara autoria (muito usado em bibliotecas/geradores de docs).",
+                    example:
+                        `/**
+ * @author Andrey Mateus
+ */`
+                },
+                {
+                    tag: "@version",
+                    where: "Arquivo / classe",
+                    desc: "Indica versão do componente (útil em documentação e releases).",
+                    example:
+                        `/**
+ * @version 1.0.0
+ */`
+                },
+                {
+                    tag: "@since",
+                    where: "Qualquer",
+                    desc: "Marca desde qual versão (do projeto ou do PHP) aquilo existe.",
+                    example:
+                        `/**
+ * @since 8.1
+ */`
+                },
+                {
+                    tag: "@package",
+                    where: "Arquivo",
+                    desc: "Agrupamento lógico para documentação (mais comum em geradores de docs).",
+                    example:
+                        `/**
+ * @package App\\Models
+ */`
+                },
+                {
+                    tag: "@subpackage",
+                    where: "Arquivo",
+                    desc: "Subgrupo dentro do package (uso mais raro hoje, mas aparece em projetos antigos).",
+                    example:
+                        `/**
+ * @subpackage User
+ */`
+                },
+                {
+                    tag: "@inheritdoc",
+                    where: "Métodos / classes",
+                    desc: "Indica que a documentação deve ser herdada do elemento pai (evita duplicação).",
+                    example:
+                        `/**
+ * @inheritdoc
+ */
+public function save(): void {}`
+                },
+
+                // Avançadas (tipagem estática / generics)
+                {
+                    tag: "@template",
+                    where: "Classes / interfaces / funções (generics)",
+                    desc: "Declara um tipo genérico (suportado por PHPStan/Psalm). Ajuda a manter tipagem forte em coleções/helpers.",
+                    example:
+                        `/**
+ * @template T
+ * @param T[] $items
+ * @return T
+ */
+function first(array $items) {
+    return $items[0];
+}`
+                },
+                {
+                    tag: "@template-covariant",
+                    where: "Classes / interfaces (generics)",
+                    desc: "Declara um template covariante (mais comum em Psalm). Ajuda a modelar coleções somente-produtoras (read-only).",
+                    example:
+                        `/**
+ * @template-covariant T
+ */
+interface ReadOnlyCollection {}`
+                },
+                {
+                    tag: "@extends",
+                    where: "Classes (generics)",
+                    desc: "Especifica o tipo ao estender uma classe genérica.",
+                    example:
+                        `/**
+ * @extends Collection<User>
+ */
+class UserCollection extends Collection {}`
+                },
+                {
+                    tag: "@implements",
+                    where: "Classes (generics)",
+                    desc: "Especifica o tipo ao implementar uma interface genérica.",
+                    example:
+                        `/**
+ * @implements IteratorAggregate<User>
+ */
+class Users implements IteratorAggregate {
+    public function getIterator(): Traversable {}
+}`
+                },
+                {
+                    tag: "@param-out",
+                    where: "Funções / métodos (analisadores estáticos)",
+                    desc: "Indica que um parâmetro será preenchido como saída (muito usado com referências/out params) para análise estática.",
+                    example:
+                        `/**
+ * @param-out User $user
+ */
+function hydrateUser(array $data, &$user): void {
+    $user = new User();
+}`
+                },
+                {
+                    tag: "@phpstan-return",
+                    where: "Funções / métodos (PHPStan)",
+                    desc: "Define um tipo de retorno mais específico para o PHPStan (sem afetar outras ferramentas).",
+                    example:
+                        `/**
+ * @phpstan-return non-empty-array<int, User>
+ */
+function listUsers(): array {}`
+                },
+                {
+                    tag: "@psalm-return",
+                    where: "Funções / métodos (Psalm)",
+                    desc: "Define um tipo de retorno mais específico para o Psalm.",
+                    example:
+                        `/**
+ * @psalm-return non-empty-array<int, User>
+ */
+function listUsers(): array {}`
+                }
+            ];
+
+            const list = document.getElementById("list");
+            const openAll = document.getElementById("openAll");
+            const closeAll = document.getElementById("closeAll");
+            const toggleOne = document.getElementById("toggleOne");
+            const modeHint = document.getElementById("modeHint");
+
+            const q = document.getElementById("q");
+            const clearSearch = document.getElementById("clearSearch");
+            const focusSearch = document.getElementById("focusSearch");
+            const countPill = document.getElementById("countPill");
+            const noResults = document.getElementById("noResults");
+
+            let singleOpenMode = false;
+
+            function escapeHtml(str) {
+                return (str || "")
+                    .replaceAll("&", "&amp;")
+                    .replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;");
+            }
+
+            function normalize(str) {
+                return (str || "")
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/\p{Diacritic}/gu, "");
+            }
+
+            function makeSearchBlob(item) {
+                return normalize(`${item.tag} ${item.where} ${item.desc}`);
+            }
+
+            function render() {
+                list.innerHTML = "";
+                tags.forEach((t, idx) => {
+                    const row = document.createElement("section");
+                    row.className = "row";
+                    row.dataset.index = String(idx);
+                    row.dataset.open = "false";
+                    row.dataset.search = makeSearchBlob(t);
+
+                    row.innerHTML = `
+          <button class="btn" type="button" aria-expanded="false">
+            <div class="left">
+              <span class="tag">${escapeHtml(t.tag)}</span>
+              <span class="where">${escapeHtml(t.where)}</span>
+            </div>
+            <span class="chev">▾</span>
+          </button>
+          <div class="details">
+            <div class="desc">${escapeHtml(t.desc)}</div>
+            <pre><code>${escapeHtml(t.example)}</code></pre>
+          </div>
+        `;
+
+                    const btn = row.querySelector(".btn");
+                    btn.addEventListener("click", () => {
+                        const isOpen = row.dataset.open === "true";
+
+                        if (singleOpenMode) {
+                            document.querySelectorAll(".row").forEach(r => {
+                                r.dataset.open = "false";
+                                r.querySelector(".btn").setAttribute("aria-expanded", "false");
+                            });
+                        }
+
+                        row.dataset.open = String(!isOpen);
+                        btn.setAttribute("aria-expanded", String(!isOpen));
+                    });
+
+                    list.appendChild(row);
+                });
+
+                applyFilter();
+            }
+
+            function applyFilter() {
+                const term = normalize(q.value.trim());
+                const rows = Array.from(document.querySelectorAll(".row"));
+                let visible = 0;
+
+                for (const row of rows) {
+                    const match = term === "" || row.dataset.search.includes(term);
+                    row.classList.toggle("hidden", !match);
+                    if (match) visible++;
+                }
+
+                countPill.textContent = `${visible}/${rows.length}`;
+                noResults.style.display = (visible === 0) ? "block" : "none";
+            }
+
+            openAll.addEventListener("click", () => {
+                document.querySelectorAll(".row:not(.hidden)").forEach(r => {
+                    r.dataset.open = "true";
+                    r.querySelector(".btn").setAttribute("aria-expanded", "true");
+                });
+            });
+
+            closeAll.addEventListener("click", () => {
+                document.querySelectorAll(".row").forEach(r => {
+                    r.dataset.open = "false";
+                    r.querySelector(".btn").setAttribute("aria-expanded", "false");
+                });
+            });
+
+            toggleOne.addEventListener("click", () => {
+                singleOpenMode = !singleOpenMode;
+                modeHint.textContent = singleOpenMode
+                    ? 'Modo atual: "abrir só uma" (clicar fecha as outras).'
+                    : "Modo atual: múltiplas abertas (pode abrir várias ao mesmo tempo).";
+                if (singleOpenMode) closeAll.click();
+            });
+
+            q.addEventListener("input", applyFilter);
+
+            clearSearch.addEventListener("click", () => {
+                q.value = "";
+                q.focus();
+                applyFilter();
+            });
+
+            focusSearch.addEventListener("click", () => {
+                q.focus();
+                q.select();
+            });
+
+            document.addEventListener("keydown", (ev) => {
+                const isMac = navigator.platform.toLowerCase().includes("mac");
+                const ctrlOrCmd = isMac ? ev.metaKey : ev.ctrlKey;
+
+                if (ctrlOrCmd && ev.key.toLowerCase() === "k") {
+                    ev.preventDefault();
+                    q.focus();
+                    q.select();
+                }
+
+                if (ev.key === "Escape") {
+                    if (document.activeElement === q || q.value.trim() !== "") {
+                        q.value = "";
+                        q.blur();
+                        applyFilter();
+                    }
+                }
+            });
+
+            render();
+        </script>
+    </body>
+
+</html>
